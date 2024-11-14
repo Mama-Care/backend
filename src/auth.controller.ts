@@ -14,9 +14,4 @@ export class AuthController {
   async login(@Body('email') email: string, @Body('senha') password: string) {
     return await this.authService.login(email, password);
   }
-
-  @Post('esqueci-senha')
-  async forgotPassword(@Body('email') email: string) {
-    return await this.authService.esqueciSenha(email);
-  }
 }
