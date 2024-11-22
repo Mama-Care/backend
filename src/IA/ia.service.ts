@@ -11,9 +11,32 @@ export class IaService {
     private readonly httpService: HttpService,
   ) {}
 
-  async saveUserData(uid: string, conteudo: any): Promise<void> {
+  async saveUserData(
+    uid: string,
+    idFirebase: string,
+    conteudo: any,
+  ): Promise<void> {
     const database = this.firebaseService.getDatabase();
-    await database.ref(`users/${uid}/conteudo`).push(conteudo);
+
+    // Caminho no Firebase para o `idFirebase`
+    const ref = database.ref(`users/${uid}/conteudo/${idFirebase}`);
+
+    // Transação para garantir consistência
+    await ref.transaction((conteudoAtual) => {
+      if (!conteudoAtual) {
+        // Cria novo conteúdo se o `idFirebase` não existir
+        return {
+          conteudo: [conteudo],
+          criadoEm: conteudo.criadoEm,
+        };
+      }
+
+      // Acrescenta o novo conteúdo ao array existente
+      return {
+        ...conteudoAtual,
+        conteudo: [...(conteudoAtual.conteudo || []), conteudo],
+      };
+    });
   }
 
   async sendData(question: string) {
@@ -45,7 +68,9 @@ export class IaService {
 
       const uid = 'user456';
 
-      await this.saveUserData(uid, content);
+      const idFirebase = '-OCGNeeT7sayfAC74HVe';
+
+      await this.saveUserData(uid, idFirebase, content);
 
       return response.data;
     } catch (error) {
