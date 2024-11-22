@@ -4,7 +4,6 @@ import { FirebaseService } from './firebase/firebase.service';
 @Injectable()
 export class AuthService {
   constructor(private readonly firebaseService: FirebaseService) {}
-  //private auth = getAuth();
 
   async cadastrar(email: string, password: string): Promise<any> {
     try {
@@ -26,4 +25,5 @@ export class AuthService {
       throw new Error('Email ou senha incorretos' + error);
     }
   }
+
 }
