@@ -68,7 +68,7 @@ export class IaService {
 
       const uid = 'user456';
 
-      const idFirebase = '-OCGNeeT7sayfAC74HVe';
+      const idFirebase = '';
 
       await this.saveUserData(uid, idFirebase, content);
 
