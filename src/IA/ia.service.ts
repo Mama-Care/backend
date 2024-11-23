@@ -48,31 +48,58 @@ export class IaService {
     }
 
     try {
-      console.log('Pergunta: ', question);
-      const response = await firstValueFrom(
-        this.httpService.post('http://127.0.0.1:5050/ask', {
-          question: question,
-        }),
-      );
+
+      //DESCOMENTAR PARA FAZER A INTEGRAÇÃO COM A IA
+      // console.log('Pergunta: ', question);
+      // const response = await firstValueFrom(
+      //   this.httpService.post('http://127.0.0.1:5050/ask', {
+      //     question: question,
+      //   }),
+      // );
+
+      // const currentDateTime = new Date();
+
+      // const content: Conteudo = {
+      //   id: '123',
+      //   criadoEm: currentDateTime.toString(),
+      //   pergunta: question,
+      //   resposta: response.data.answer,
+      // };
+
+      // console.log('CONTEUDO: ' + JSON.stringify(content, null, 2));
+
+      // const uid = 'user456'; //atualizar para uid do login
+
+      // const idFirebase = ''; //atualizar
+
+      // await this.saveUserData(uid, idFirebase, content);
+
+      // return response.data;
+
+
+      // Testes com mock sem a IA - apagar depois 
+
+      const mockResponse = {
+        answer: 'resposta mockada genérica',
+      };
 
       const currentDateTime = new Date();
 
       const content: Conteudo = {
         id: '123',
-        criadoEm: currentDateTime.toString(),
+        criadoEm: currentDateTime.toISOString(),
         pergunta: question,
-        resposta: response.data.answer,
+        resposta: mockResponse.answer,
       };
 
-      console.log('CONTEUDO: ' + JSON.stringify(content, null, 2));
+      console.log('CONTEUDO MOCKADO:', JSON.stringify(content, null, 2));
 
-      const uid = 'user456';
-
-      const idFirebase = '';
+      const uid = 'user456'; // Atualizar para uid do login real
+      const idFirebase = ''; // Atualizar
 
       await this.saveUserData(uid, idFirebase, content);
 
-      return response.data;
+      return mockResponse;
     } catch (error) {
       throw new Error(`Erro ao enviar dados: ${error.message}`);
     }
