@@ -39,7 +39,7 @@ export class IaService {
     });
   }
 
-  async sendData(question: string) {
+  async sendData(id: string, question: string) {
     interface Conteudo {
       id: string;
       criadoEm: string;
@@ -60,7 +60,7 @@ export class IaService {
       // const currentDateTime = new Date();
 
       // const content: Conteudo = {
-      //   id: '123',
+      //   id: id,
       //   criadoEm: currentDateTime.toString(),
       //   pergunta: question,
       //   resposta: response.data.answer,
@@ -68,7 +68,7 @@ export class IaService {
 
       // console.log('CONTEUDO: ' + JSON.stringify(content, null, 2));
 
-      // const uid = 'user456'; //atualizar para uid do login
+      // const uid = id; //atualizar para uid do login
 
       // const idFirebase = ''; //atualizar
 
@@ -86,7 +86,7 @@ export class IaService {
       const currentDateTime = new Date();
 
       const content: Conteudo = {
-        id: '123',
+        id: id,
         criadoEm: currentDateTime.toISOString(),
         pergunta: question,
         resposta: mockResponse.answer,
@@ -94,8 +94,8 @@ export class IaService {
 
       console.log('CONTEUDO MOCKADO:', JSON.stringify(content, null, 2));
 
-      const uid = 'user456'; // Atualizar para uid do login real
-      const idFirebase = ''; // Atualizar
+      const uid = id;
+      const idFirebase = '';
 
       await this.saveUserData(uid, idFirebase, content);
 
@@ -105,20 +105,26 @@ export class IaService {
     }
   }
 
-  // Recuperar dados do Firebase
   async getUserData(uid: string): Promise<any[]> {
     const database = this.firebaseService.getDatabase();
     const snapshot = await database.ref(`users/${uid}/conteudo`).once('value');
     const data = snapshot.val();
-
-    if (!data) {
-      return []; // Retorna uma lista vazia se não houver dados
+  
+    if (!data || !data.conteudo) {
+      return [];
     }
-
-    // Converte o objeto em uma lista de objetos com os IDs incluídos
-    return Object.entries(data).map(([key, value]: [string, any]) => ({
-      idFirebase: key,
-      ...value,
-    }));
+  
+    const content = data.conteudo;
+  
+    const formattedData: any[] = [];
+  
+    content.forEach((item: any) => {
+      formattedData.push({
+        idFirebase: item.id,
+        ...item,
+      });
+    });
+  
+    return formattedData;
   }
 }
