@@ -50,56 +50,56 @@ export class IaService {
     try {
 
       //DESCOMENTAR PARA FAZER A INTEGRAÇÃO COM A IA
-      // console.log('Pergunta: ', question);
-      // const response = await firstValueFrom(
-      //   this.httpService.post('http://127.0.0.1:5050/ask', {
-      //     question: question,
-      //   }),
-      // );
-
-      // const currentDateTime = new Date();
-
-      // const content: Conteudo = {
-      //   id: id,
-      //   criadoEm: currentDateTime.toString(),
-      //   pergunta: question,
-      //   resposta: response.data.answer,
-      // };
-
-      // console.log('CONTEUDO: ' + JSON.stringify(content, null, 2));
-
-      // const uid = id; //atualizar para uid do login
-
-      // const idFirebase = ''; //atualizar
-
-      // await this.saveUserData(uid, idFirebase, content);
-
-      // return response.data;
-
-
-      // Testes com mock sem a IA - apagar depois 
-
-      const mockResponse = {
-        answer: 'resposta mockada genérica',
-      };
+      console.log('Pergunta: ', question);
+      const response = await firstValueFrom(
+        this.httpService.post('http://127.0.0.1:5050/ask', {
+          question: question,
+        }),
+      );
 
       const currentDateTime = new Date();
 
       const content: Conteudo = {
         id: id,
-        criadoEm: currentDateTime.toISOString(),
+        criadoEm: currentDateTime.toString(),
         pergunta: question,
-        resposta: mockResponse.answer,
+        resposta: response.data.answer,
       };
 
-      console.log('CONTEUDO MOCKADO:', JSON.stringify(content, null, 2));
+      console.log('CONTEUDO: ' + JSON.stringify(content, null, 2));
 
-      const uid = id;
-      const idFirebase = '';
+      const uid = id; //atualizar para uid do login
+
+      const idFirebase = ''; //atualizar
 
       await this.saveUserData(uid, idFirebase, content);
 
-      return mockResponse;
+      return response.data;
+
+
+      // Testes com mock sem a IA - apagar depois 
+
+      // const mockResponse = {
+      //   answer: 'resposta mockada genérica',
+      // };
+
+      // const currentDateTime = new Date();
+
+      // const content: Conteudo = {
+      //   id: id,
+      //   criadoEm: currentDateTime.toISOString(),
+      //   pergunta: question,
+      //   resposta: mockResponse.answer,
+      // };
+
+      // console.log('CONTEUDO MOCKADO:', JSON.stringify(content, null, 2));
+
+      // const uid = id;
+      // const idFirebase = '';
+
+      // await this.saveUserData(uid, idFirebase, content);
+
+      // return mockResponse;
     } catch (error) {
       throw new Error(`Erro ao enviar dados: ${error.message}`);
     }
